@@ -1,5 +1,6 @@
 import multer from 'multer';
 
+
 const storage = multer.memoryStorage();
 
 const tiposPermitidos = [
@@ -17,9 +18,11 @@ const tiposPermitidos = [
 ];
 
 const fileFilter = (req, file, cb) => {
-    tiposPermitidos.includes(file.mimetype)
-        ? cb(null, true)
-        : cb(new Error('Tipo de arquivo não permitido.'));
+    if (tiposPermitidos.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Tipo de arquivo não permitido.'), false);
+    }
 };
 
 export const upload = multer({
@@ -27,3 +30,4 @@ export const upload = multer({
     fileFilter,
     limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
 });
+
